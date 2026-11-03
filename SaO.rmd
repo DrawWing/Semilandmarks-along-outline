@@ -1,0 +1,488 @@
+---
+title: "Semilandmarks along pixel outline"
+subtitle: "<https://drawwing.github.io/Semilandmarks-along-outline/SaO.html>"
+author: 
+  - name: "Adam Tofilski"
+    affiliation: University of Agriculture in Krakow, Poland
+    orcid: 0000-0002-3898-7029
+date: today
+date-format: iso
+format: 
+  html:
+    self-contained: true
+    date: today
+    toc: true
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  tidy = TRUE, tidy.opts = list(arrow=TRUE, indent=2)
+)
+options(digits=3) 
+
+```
+
+# Libraries
+
+```{r libraries}
+# calculations
+library(geomorph) # GPA 
+library(shapes) # procGPA
+library(tidyr) # pivot_longer
+
+# plotting and visualization
+library(ggplot2) # plots
+ggplot2::theme_set(theme_light())
+library(ggpubr) # ggarange
+
+```
+
+# Variable names
+
+```{r var-names}
+
+p = 21 # number of landmarks
+k = 2  # number of dimensions, in this case 2 for coordinates (x, y)
+
+# define which landmarks are connected by lines in wireframe graph
+link.x <- seq(from=1, to=p-1)
+link.y <- seq(from=2, to=p)
+links <- cbind(link.x, link.y)
+
+```
+
+# EqD - Equidistant semilandmarks
+Uncorrected semilandmarks are equidistant along the pixel outline. 
+
+## GPA
+
+```{r eqd-gpa}
+
+inEqd = read.csv("https://zenodo.org/records/23911653/files/EqD.csv", row.names = 1, sep = ";")
+colony = substr(rownames(inEqd),1,6)
+colony <- gsub("KR-00", "colony", colony)
+table(colony)
+
+threeDEqd <- arrayspecs(inEqd, p, k)
+dimnames(threeDEqd)[[3]] <- rownames(inEqd)
+gpaEqd <- gpagen(threeDEqd, print.progress = FALSE, PrinAxes = FALSE)
+xyAll <- matrix(aperm(gpaEqd$coords, c(1, 3, 2)), nrow=prod(dim(threeDEqd)[c(1,3)]))
+colnames(xyAll) = c("X", "Y")
+plotData = cbind(xyAll, 
+                 landmark = rep(seq_len(dim(threeDEqd)[1]), dim(threeDEqd)[3]),
+                 specimen = rep(seq_len(dim(threeDEqd)[3]), each=dim(threeDEqd)[1]))
+plotMean = as.data.frame(gpaEqd$consensus) 
+figAliA = ggplot(plotMean, aes(x = X, y = Y)) +
+  geom_path(size = 0.5, color = "black") +
+  coord_fixed() +
+  geom_text(aes(label = rownames(plotMean)), nudge_y = 0.02) +
+  geom_point(plotData, mapping=aes(x = X, y = Y), size = 0.5, color = "blue") +
+  geom_point(plotMean, mapping=aes(x = X, y = Y), size = 1, color = "red") +
+  theme_void()
+figAliA
+
+```
+
+## PCA
+
+```{r eqd-pca}
+
+pcaEqd <- gm.prcomp(gpaEqd$coords)
+varTab <- summary(pcaEqd)$PC.summary
+varExp <- data.frame(
+  PC = seq_along(pcaEqd$d),
+  var = as.numeric(varTab["Proportion of Variance", ])
+)
+figHistA = ggplot(varExp, aes(x=PC, y=var)) + 
+  geom_col(color = "black", fill = "white") + 
+  labs(x = "", y = "Proportion \nof variance") +
+  xlim(0, 22) +
+  ylim(0, 0.6)
+figHistA
+
+pcaScoresEqd <- as.data.frame(pcaEqd$x)
+colnames(pcaScoresEqd) <- gsub("Comp", "PC", colnames(pcaScoresEqd))
+pcaScoresEqd <- cbind(pcaScoresEqd, colony)
+
+# create plot labels
+variance <- varTab["Proportion of Variance", "Comp1"]
+variance <- round(100 * variance, 1)
+labelX <- paste0("PC1 (", variance, "%)")
+variance <- varTab["Proportion of Variance", "Comp2"]
+variance <- round(100 * variance, 1)
+labelY <- paste0("PC2 (", variance, "%)")
+
+figPcaA = ggplot(pcaScoresEqd, aes(x = PC1, y = PC2, shape = colony, color = colony)) +
+  geom_point() + scale_shape_manual(name = "", values = c(1:3)) +
+  scale_color_manual(name = "", values = rainbow(3)) + 
+  stat_ellipse() +
+  labs(x = labelX, y = labelY) 
+figPcaA
+
+```
+
+## LM
+
+```{r eqd-lm}
+
+gdfEqd <- geomorph.data.frame(gpaEqd, colony = colony)
+lmEqd <- procD.lm(coords ~ colony, data = gdfEqd)
+summary(lmEqd)
+
+pdEqd <- pairwise(lmEqd, groups = colony)
+summary(pdEqd, test.type = "dist", stat.table = TRUE)
+
+pvEqd = morphol.disparity(f1 = lmEqd, groups = colony, data = gdfEqd, print.progress = FALSE)
+pvEqd
+
+```
+
+# SaT - samilandmarks along tangent
+Semilandmarks corrected along tangent. 
+
+## GPA
+
+```{r sat-gpa}
+
+# create matrix used for sliding semilandmarks
+slidingMat <- cbind(before = seq(from = 1, to = p - 2), slide = seq(from = 2, to = p -
+  1), after = seq(from = 3, to = p))
+slidingMat
+
+
+gpaSat <- gpagen(threeDEqd, curves = slidingMat, ProcD = TRUE, print.progress = FALSE, PrinAxes = FALSE)
+xyAll <- matrix(aperm(gpaSat$coords, c(1, 3, 2)), nrow=prod(dim(threeDEqd)[c(1,3)]))
+colnames(xyAll) = c("X", "Y")
+plotData = cbind(xyAll, 
+                 landmark = rep(seq_len(dim(threeDEqd)[1]), dim(threeDEqd)[3]),
+                 specimen = rep(seq_len(dim(threeDEqd)[3]), each=dim(threeDEqd)[1]))
+plotMean = as.data.frame(gpaSat$consensus) 
+figAliB = ggplot(plotMean, aes(x = X, y = Y)) +
+  geom_path(size = 0.5, color = "black") +
+  coord_fixed() +
+  geom_text(aes(label = rownames(plotMean)), nudge_y = 0.02) +
+  geom_point(plotData, mapping=aes(x = X, y = Y), size = 0.5, color = "blue") +
+  geom_point(plotMean, mapping=aes(x = X, y = Y), size = 1, color = "red") +
+  theme_void()
+figAliB
+
+```
+
+## PCA
+
+```{r sat-pca}
+
+pcaSat <- gm.prcomp(gpaSat$coords)
+varTab <- summary(pcaSat)$PC.summary
+varExp <- data.frame(
+  PC = seq_along(pcaSat$d),
+  var = as.numeric(varTab["Proportion of Variance", ])
+)
+figHistB = ggplot(varExp, aes(x=PC, y=var)) + 
+  geom_col(color = "black", fill = "white") + 
+  labs(x = "", y = "Proportion \nof variance") +
+  xlim(0, 22) +
+  ylim(0, 0.6)
+figHistB
+
+pcaScoresSat <- as.data.frame(pcaSat$x)
+colnames(pcaScoresSat) <- gsub("Comp", "PC", colnames(pcaScoresSat))
+pcaScoresSat <- cbind(pcaScoresSat, colony)
+
+# create plot labels
+variance <- varTab["Proportion of Variance", "Comp1"]
+variance <- round(100 * variance, 1)
+labelX <- paste0("PC1 (", variance, "%)")
+variance <- varTab["Proportion of Variance", "Comp2"]
+variance <- round(100 * variance, 1)
+labelY <- paste0("PC2 (", variance, "%)")
+
+figPcaB = ggplot(pcaScoresSat, aes(x = PC1, y = PC2, shape = colony, color = colony)) +
+  geom_point() + scale_shape_manual(name = "", values = c(1:3)) +
+  scale_color_manual(name = "", values = rainbow(3)) + 
+  stat_ellipse() +
+  labs(x = labelX, y = labelY) 
+figPcaB
+
+```
+
+## LM
+
+```{r sat-lm}
+
+gdfSat <- geomorph.data.frame(gpaSat, colony = colony)
+lmSat <- procD.lm(coords ~ colony, data = gdfSat)
+summary(lmSat)
+
+pdSat <- pairwise(lmSat, groups = colony)
+summary(pdSat, test.type = "dist", stat.table = TRUE)
+
+pvSat = morphol.disparity(f1 = lmSat, groups = colony, data = gdfSat, print.progress = FALSE)
+pvSat
+
+```
+
+# SaO - samilandmarks along outline
+Semilandmarks corrected along pixel outline 
+
+## GPA
+
+```{r sao-gpa}
+
+inSao <- read.csv("https://zenodo.org/records/23911653/files/SaO.csv", row.names = 1, sep = ";")
+
+threeDSao <- arrayspecs(inSao, p, k)
+dimnames(threeDSao)[[3]] <- rownames(inSao)
+gpaSao <- gpagen(threeDSao, print.progress = FALSE, PrinAxes = FALSE)
+xyAll <- matrix(aperm(gpaSao$coords, c(1, 3, 2)), nrow=prod(dim(threeDSao)[c(1,3)]))
+colnames(xyAll) = c("X", "Y")
+plotData = cbind(xyAll, 
+                 landmark = rep(seq_len(dim(threeDSao)[1]), dim(threeDSao)[3]),
+                 specimen = rep(seq_len(dim(threeDSao)[3]), each=dim(threeDSao)[1]))
+plotMean = as.data.frame(gpaSao$consensus) 
+figAliC = ggplot(plotMean, aes(x = X, y = Y)) +
+  geom_path(size = 0.5, color = "black") +
+  coord_fixed() +
+  geom_text(aes(label = rownames(plotMean)), nudge_y = 0.02) +
+  geom_point(plotData, mapping=aes(x = X, y = Y), size = 0.5, color = "blue") +
+  geom_point(plotMean, mapping=aes(x = X, y = Y), size = 1, color = "red") +
+  theme_void()
+figAliC
+
+```
+
+## PCA
+
+```{r sao-pca}
+
+pcaSao <- gm.prcomp(gpaSao$coords)
+varTab <- summary(pcaSao)$PC.summary
+varExp <- data.frame(
+  PC = seq_along(pcaSao$d),
+  var = as.numeric(varTab["Proportion of Variance", ])
+)
+figHistC = ggplot(varExp, aes(x=PC, y=var)) + 
+  geom_col(color = "black", fill = "white") + 
+  labs(x = "", y = "Proportion \nof variance") +
+  xlim(0, 22) +
+  ylim(0, 0.6)
+figHistC
+
+pcaScoresSao <- as.data.frame(pcaSao$x)
+colnames(pcaScoresSao) <- gsub("Comp", "PC", colnames(pcaScoresSao))
+pcaScoresSao <- cbind(pcaScoresSao, colony)
+
+# create plot labels
+variance <- varTab["Proportion of Variance", "Comp1"]
+variance <- round(100 * variance, 1)
+labelX <- paste0("PC1 (", variance, "%)")
+variance <- varTab["Proportion of Variance", "Comp2"]
+variance <- round(100 * variance, 1)
+labelY <- paste0("PC2 (", variance, "%)")
+
+figPcaC = ggplot(pcaScoresSao, aes(x = PC1, y = PC2, shape = colony, color = colony)) +
+  geom_point() + scale_shape_manual(name = "", values = c(1:3)) +
+  scale_color_manual(name = "", values = rainbow(3)) + 
+  stat_ellipse() +
+  labs(x = labelX, y = labelY) 
+figPcaC
+
+```
+
+## LM
+
+```{r sao-lm}
+
+gdfSao <- geomorph.data.frame(gpaSao, colony = colony)
+lmSao <- procD.lm(coords ~ colony, data = gdfSao)
+summary(lmSao)
+
+pdSao <- pairwise(lmSao, groups = colony)
+summary(pdSao, test.type = "dist", stat.table = TRUE)
+
+pvSao = morphol.disparity(f1 = lmSao, groups = colony, data = gdfSao, print.progress = FALSE)
+pvSao
+
+```
+
+# Distance to mean shape
+
+```{r rho}
+
+rhoEqd = procGPA(gpaEqd$coords)
+rhoEqd = rhoEqd$rho
+
+rhoSat = procGPA(gpaSat$coords)
+rhoSat = rhoSat$rho
+
+rhoSao = procGPA(gpaSao$coords)
+rhoSao = rhoSao$rho
+
+rhoEqd = data.frame(Semilandmarks = "EqD", rho = rhoEqd)
+rhoSat = data.frame(Semilandmarks = "SaT", rho = rhoSat)
+rhoSao = data.frame(Semilandmarks = "SaO", rho = rhoSao)
+
+rho = rbind(rhoEqd, rhoSat, rhoSao)
+rho$Semilandmarks  = factor(
+  rho$Semilandmarks, 
+  levels=c("EqD", "SaT", "SaO"),
+  labels=c("Equidistant", "Along tangent", "Along outline")
+) 
+
+anova = aov(rho ~ Semilandmarks, data=rho)
+summary(anova)
+TukeyHSD(anova, conf.level=.95)
+
+figVA = ggplot(rho, aes(x=Semilandmarks, y=rho)) + 
+  geom_boxplot(show.legend = FALSE) +
+  labs(x = NULL, y = "Distance to mean shape") +
+  scale_y_continuous(limits = c(0, 0.04), expand = c(0, 0))
+figVA
+
+```
+
+# Wing shape
+
+```{r shape}
+
+inAll = inEqd
+tmp = as.data.frame(two.d.array(gpaSat$coords))
+colnames(tmp) = colnames(inAll)
+inAll = rbind(inAll, tmp)
+inAll = rbind(inAll, inSao)
+
+threeDAll <- arrayspecs(inAll, p, k)
+dimnames(threeDAll)[[3]] <- rownames(inAll)
+gpaAll <- gpagen(threeDAll, print.progress = FALSE, PrinAxes = FALSE)
+
+semilandmarksAll <- c(rep("EqD", 90),
+                      rep("SaT", 90),
+                      rep("SaO", 90))
+
+colonyAll <- substr(rownames(inAll), 1, 6)
+colonyAll <- gsub("KR-00", "colony", colonyAll)
+
+gdfAll <- geomorph.data.frame(gpaAll, colony = colonyAll, semilandmarks = semilandmarksAll)
+lmAll <- procD.lm(coords ~ colony * semilandmarks, data = gdfAll)
+summary(lmAll)
+
+gdfAll$colonyMethod <- interaction(
+  gdfAll$colony,
+  gdfAll$semilandmarks,
+  sep = "."
+)
+
+pdAll <- pairwise(lmAll, groups = gdfAll$colonyMethod)
+summary(pdAll)
+
+pvSao = morphol.disparity(f1 = lmSao, groups = colony, data = gdfSao, print.progress = FALSE)
+pvSao
+
+```
+
+# Compare variance within and between colonies
+
+```{r var}
+
+pv = data.frame(
+  EqD = pvEqd$Procrustes.var,
+  SaT = pvSat$Procrustes.var,
+  SaO = pvSao$Procrustes.var
+)
+pv$colony <- factor(1:nrow(pv))
+
+pvLong <- pivot_longer(
+  pv,
+  cols = c(EqD, SaT, SaO),
+  names_to = "Semilandmarks",
+  values_to = "PV"
+)
+pvLong$Semilandmarks <- factor(
+  pvLong$Semilandmarks,
+  levels=c("EqD", "SaT", "SaO"),
+  labels=c("Equidistant", "Along tangent", "Along outline")
+) 
+figVB = ggplot(pvLong,
+               aes(x = Semilandmarks, y = PV/1e-04,
+                   group = colony, colour = colony)) +
+  geom_line() +
+  geom_point() + 
+  labs(x = NULL, y = expression("Procrustes variance (" * 10^{-4} * ")")) + 
+  scale_color_manual(values = rainbow(3)) + 
+  scale_y_continuous(
+    limits = c(0, 3.5),
+    expand = c(0, 0)
+  ) + theme(legend.position = "top")
+figVB
+
+pd = data.frame(
+  EqD = pdEqd$means.dist$obs[upper.tri(pdEqd$means.dist$obs)],
+  SaT = pdSat$means.dist$obs[upper.tri(pdSat$means.dist$obs)],
+  SaO = pdSao$means.dist$obs[upper.tri(pdSao$means.dist$obs)]
+)
+pd$colony <- factor(c("1-2", "1-3", "2-3"))
+pdLong <- pivot_longer(
+  pd,
+  cols = c(EqD, SaT, SaO),
+  names_to = "Semilandmarks",
+  values_to = "PD"
+)
+pdLong$Semilandmarks <- factor(
+  pdLong$Semilandmarks,
+  levels=c("EqD", "SaT", "SaO"),
+  labels=c("Equidistant", "Along tangent", "Along outline")
+) 
+figVC = ggplot(pdLong,
+               aes(x = Semilandmarks, y = PD,
+                   group = colony, colour = colony)) +
+  geom_line() +
+  geom_point() + 
+  labs(x = NULL, y = "Procrustes distance") +
+  scale_color_manual(values = rainbow(3)) + 
+  scale_y_continuous(
+    limits = c(0, 0.02),
+    expand = c(0, 0)
+  ) + theme(legend.position = "top")
+figVC
+
+figV = ggarrange(figVA, figVB, figVC, labels = c("a", "b", "c"), font.label = list(size = 10, face = "bold"), ncol = 1, nrow = 3)
+annotate_figure(
+  figV,
+  bottom = text_grob("Semilandmarks", size = 12)
+)
+# ggsave('figV.pdf', width = 120, height = 200, units = 'mm')
+# ggsave('figV.png', width = 120, height = 200, units = 'mm')
+
+```
+
+# Figures
+
+```{r fig}
+
+ggarrange(figAliA, figAliB, figAliC,
+          labels = c("a", "b", "c"),
+          font.label = list(size = 12, face = "bold"),
+          ncol = 1, nrow = 3)
+# ggsave("figAli.pdf", width = 120, height = 200, units = 'mm')
+# ggsave("figAli.png", width = 120, height = 200, units = 'mm')
+
+# ggarrange(figWithInsetA, figWithInsetB, figWithInsetC,
+ggarrange(figPcaA, figPcaB, figPcaC,
+          labels = c("a", "b", "c"),
+          font.label = list(size = 12, face = "bold"),
+          ncol = 1, nrow = 3, common.legend = TRUE, legend = "top")
+# ggsave("figPca.pdf", width = 120, height = 200, units = 'mm')
+# ggsave("figPca.png", width = 120, height = 200, units = 'mm')
+
+```
+
+# Session information
+
+```{r info}
+sessionInfo()
+```
+
