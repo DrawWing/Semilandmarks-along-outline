@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Adam Tofilski">
-<meta name="dcterms.date" content="2026-11-03">
+<meta name="dcterms.date" content="2026-11-04">
 
 <title>Semilandmarks along pixel outline</title>
 <style>
@@ -2269,7 +2269,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-11-03</p>
+      <p class="date">2026-11-04</p>
     </div>
   </div>
   
@@ -3002,109 +3002,24 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 
 Call: procD.lm(f1 = coords ~ colony * semilandmarks, data = gdfAll)</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>gdfAll<span class="sc">$</span>colonyMethod <span class="ot">&lt;-</span> <span class="fu">interaction</span>(gdfAll<span class="sc">$</span>colony, gdfAll<span class="sc">$</span>semilandmarks, <span class="at">sep =</span> <span class="st">&quot;.&quot;</span>)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>pdAll <span class="ot">&lt;-</span> <span class="fu">pairwise</span>(lmAll, <span class="at">groups =</span> gdfAll<span class="sc">$</span>colonyMethod)</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pdAll)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Pairwise comparisons
-
-Groups: colony1.EqD colony2.EqD colony3.EqD colony1.SaO colony2.SaO colony3.SaO colony1.SaT colony2.SaT colony3.SaT 
-
-RRPP: 1000 permutations
-
-LS means:
-Vectors hidden (use show.vectors = TRUE to view)
-
-Pairwise distances between means, plus statistics
-                              d UCL (95%)      Z Pr &gt; d
-colony1.EqD:colony2.EqD 0.01879   0.01566  4.422  0.001
-colony1.EqD:colony3.EqD 0.01595   0.01382  3.329  0.001
-colony1.EqD:colony1.SaO 0.00785   0.00480  3.211  0.002
-colony1.EqD:colony2.SaO 0.01400   0.01547  0.349  0.374
-colony1.EqD:colony3.SaO 0.01267   0.01337  0.991  0.160
-colony1.EqD:colony1.SaT 0.00573   0.00468  2.368  0.012
-colony1.EqD:colony2.SaT 0.01616   0.01553  2.189  0.016
-colony1.EqD:colony3.SaT 0.01422   0.01374  2.120  0.018
-colony2.EqD:colony3.EqD 0.01071   0.00973  2.285  0.013
-colony2.EqD:colony1.SaO 0.01349   0.01597 -0.679  0.751
-colony2.EqD:colony2.SaO 0.00644   0.00475  2.605  0.006
-colony2.EqD:colony3.SaO 0.00889   0.00961  1.040  0.157
-colony2.EqD:colony1.SaT 0.01612   0.01594  1.811  0.033
-colony2.EqD:colony2.SaT 0.00474   0.00462  1.699  0.038
-colony2.EqD:colony3.SaT 0.01019   0.00986  1.961  0.023
-colony3.EqD:colony1.SaO 0.01110   0.01423 -1.111  0.866
-colony3.EqD:colony2.SaO 0.00760   0.00981 -0.360  0.629
-colony3.EqD:colony3.SaO 0.00533   0.00471  2.145  0.020
-colony3.EqD:colony1.SaT 0.01360   0.01402  1.285  0.101
-colony3.EqD:colony2.SaT 0.00929   0.00975  1.315  0.103
-colony3.EqD:colony3.SaT 0.00387   0.00477  0.850  0.206
-colony1.SaO:colony2.SaO 0.01013   0.01572 -3.662  1.000
-colony1.SaO:colony3.SaO 0.00869   0.01374 -2.760  0.995
-colony1.SaO:colony1.SaT 0.00480   0.00485  1.600  0.054
-colony1.SaO:colony2.SaT 0.01210   0.01587 -1.789  0.958
-colony1.SaO:colony3.SaT 0.01018   0.01402 -1.837  0.972
-colony2.SaO:colony3.SaO 0.00470   0.00972 -4.525  1.000
-colony2.SaO:colony1.SaT 0.01230   0.01584 -1.581  0.939
-colony2.SaO:colony2.SaT 0.00359   0.00475  0.374  0.353
-colony2.SaO:colony3.SaT 0.00650   0.00997 -1.950  0.974
-colony3.SaO:colony1.SaT 0.01085   0.01364 -0.862  0.803
-colony3.SaO:colony2.SaT 0.00684   0.00973 -1.119  0.857
-colony3.SaO:colony3.SaT 0.00353   0.00485  0.301  0.368
-colony1.SaT:colony2.SaT 0.01451   0.01584  0.558  0.279
-colony1.SaT:colony3.SaT 0.01264   0.01384  0.609  0.270
-colony2.SaT:colony3.SaT 0.00813   0.00968  0.295  0.381</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>pvSao <span class="ot">&lt;-</span> <span class="fu">morphol.disparity</span>(<span class="at">f1 =</span> lmSao, <span class="at">groups =</span> colony, <span class="at">data =</span> gdfSao, <span class="at">print.progress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>pvSao</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-morphol.disparity(f1 = lmSao, groups = colony, data = gdfSao,  
-    print.progress = FALSE) 
-
-
-
-Randomized Residual Permutation Procedure Used
-1000 Permutations
-
-Procrustes variances for defined groups
- colony1  colony2  colony3 
-3.81e-05 3.22e-05 3.42e-05 
-
-
-Pairwise absolute differences between variances
-         colony1  colony2  colony3
-colony1 0.00e+00 5.98e-06 3.91e-06
-colony2 5.98e-06 0.00e+00 2.07e-06
-colony3 3.91e-06 2.07e-06 0.00e+00
-
-
-P-Values
-        colony1 colony2 colony3
-colony1   1.000   0.445   0.632
-colony2   0.445   1.000   0.825
-colony3   0.632   0.825   1.000</code></pre>
-</div>
 </div>
 </section>
 <section id="compare-variance-within-and-between-colonies" class="level1">
 <h1>Compare variance within and between colonies</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pv <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">EqD =</span> pvEqd<span class="sc">$</span>Procrustes.var, <span class="at">SaT =</span> pvSat<span class="sc">$</span>Procrustes.var, <span class="at">SaO =</span> pvSao<span class="sc">$</span>Procrustes.var)</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>pv<span class="sc">$</span>colony <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pv))</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>pvLong <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pv, <span class="at">cols =</span> <span class="fu">c</span>(EqD, SaT, SaO), <span class="at">names_to =</span> <span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;PV&quot;</span>)</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>pvLong<span class="sc">$</span>Semilandmarks <span class="ot">&lt;-</span> <span class="fu">factor</span>(pvLong<span class="sc">$</span>Semilandmarks, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;EqD&quot;</span>, <span class="st">&quot;SaT&quot;</span>, <span class="st">&quot;SaO&quot;</span>),</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Equidistant&quot;</span>, <span class="st">&quot;Along tangent&quot;</span>, <span class="st">&quot;Along outline&quot;</span>))</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>figVB <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pvLong, <span class="fu">aes</span>(<span class="at">x =</span> Semilandmarks, <span class="at">y =</span> PV<span class="sc">/</span><span class="fl">1e-04</span>, <span class="at">group =</span> colony, <span class="at">colour =</span> colony)) <span class="sc">+</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">&quot;Procrustes variance (&quot;</span> <span class="sc">*</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span><span class="sc">^</span>{</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">4</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">*</span> <span class="st">&quot;)&quot;</span>)) <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">3</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,</span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fl">3.5</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>)</span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>figVB</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>pv <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">EqD =</span> pvEqd<span class="sc">$</span>Procrustes.var, <span class="at">SaT =</span> pvSat<span class="sc">$</span>Procrustes.var, <span class="at">SaO =</span> pvSao<span class="sc">$</span>Procrustes.var)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pv<span class="sc">$</span>colony <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pv))</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>pvLong <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pv, <span class="at">cols =</span> <span class="fu">c</span>(EqD, SaT, SaO), <span class="at">names_to =</span> <span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;PV&quot;</span>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>pvLong<span class="sc">$</span>Semilandmarks <span class="ot">&lt;-</span> <span class="fu">factor</span>(pvLong<span class="sc">$</span>Semilandmarks, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;EqD&quot;</span>, <span class="st">&quot;SaT&quot;</span>, <span class="st">&quot;SaO&quot;</span>),</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Equidistant&quot;</span>, <span class="st">&quot;Along tangent&quot;</span>, <span class="st">&quot;Along outline&quot;</span>))</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>figVB <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pvLong, <span class="fu">aes</span>(<span class="at">x =</span> Semilandmarks, <span class="at">y =</span> PV<span class="sc">/</span><span class="fl">1e-04</span>, <span class="at">group =</span> colony, <span class="at">colour =</span> colony)) <span class="sc">+</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">&quot;Procrustes variance (&quot;</span> <span class="sc">*</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span><span class="sc">^</span>{</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">4</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  } <span class="sc">*</span> <span class="st">&quot;)&quot;</span>)) <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">3</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fl">3.5</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>)</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>figVB</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3112,16 +3027,16 @@ colony3   0.632   0.825   1.000</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>pd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">EqD =</span> pdEqd<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdEqd<span class="sc">$</span>means.dist<span class="sc">$</span>obs)], <span class="at">SaT =</span> pdSat<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdSat<span class="sc">$</span>means.dist<span class="sc">$</span>obs)],</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">SaO =</span> pdSao<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdSao<span class="sc">$</span>means.dist<span class="sc">$</span>obs)])</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>pd<span class="sc">$</span>colony <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;1-2&quot;</span>, <span class="st">&quot;1-3&quot;</span>, <span class="st">&quot;2-3&quot;</span>))</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>pdLong <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pd, <span class="at">cols =</span> <span class="fu">c</span>(EqD, SaT, SaO), <span class="at">names_to =</span> <span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;PD&quot;</span>)</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>pdLong<span class="sc">$</span>Semilandmarks <span class="ot">&lt;-</span> <span class="fu">factor</span>(pdLong<span class="sc">$</span>Semilandmarks, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;EqD&quot;</span>, <span class="st">&quot;SaT&quot;</span>, <span class="st">&quot;SaO&quot;</span>),</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Equidistant&quot;</span>, <span class="st">&quot;Along tangent&quot;</span>, <span class="st">&quot;Along outline&quot;</span>))</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>figVC <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pdLong, <span class="fu">aes</span>(<span class="at">x =</span> Semilandmarks, <span class="at">y =</span> PD, <span class="at">group =</span> colony, <span class="at">colour =</span> colony)) <span class="sc">+</span></span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">&quot;Procrustes distance&quot;</span>) <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">3</span>)) <span class="sc">+</span></span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.02</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>)</span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>figVC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>pd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">EqD =</span> pdEqd<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdEqd<span class="sc">$</span>means.dist<span class="sc">$</span>obs)], <span class="at">SaT =</span> pdSat<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdSat<span class="sc">$</span>means.dist<span class="sc">$</span>obs)],</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">SaO =</span> pdSao<span class="sc">$</span>means.dist<span class="sc">$</span>obs[<span class="fu">upper.tri</span>(pdSao<span class="sc">$</span>means.dist<span class="sc">$</span>obs)])</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>pd<span class="sc">$</span>colony <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;1-2&quot;</span>, <span class="st">&quot;1-3&quot;</span>, <span class="st">&quot;2-3&quot;</span>))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>pdLong <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(pd, <span class="at">cols =</span> <span class="fu">c</span>(EqD, SaT, SaO), <span class="at">names_to =</span> <span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;PD&quot;</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>pdLong<span class="sc">$</span>Semilandmarks <span class="ot">&lt;-</span> <span class="fu">factor</span>(pdLong<span class="sc">$</span>Semilandmarks, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;EqD&quot;</span>, <span class="st">&quot;SaT&quot;</span>, <span class="st">&quot;SaO&quot;</span>),</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Equidistant&quot;</span>, <span class="st">&quot;Along tangent&quot;</span>, <span class="st">&quot;Along outline&quot;</span>))</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>figVC <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pdLong, <span class="fu">aes</span>(<span class="at">x =</span> Semilandmarks, <span class="at">y =</span> PD, <span class="at">group =</span> colony, <span class="at">colour =</span> colony)) <span class="sc">+</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">&quot;Procrustes distance&quot;</span>) <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.02</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>figVC</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3129,9 +3044,9 @@ colony3   0.632   0.825   1.000</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>figV <span class="ot">&lt;-</span> <span class="fu">ggarrange</span>(figVA, figVB, figVC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">annotate_figure</span>(figV, <span class="at">bottom =</span> <span class="fu">text_grob</span>(<span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>figV <span class="ot">&lt;-</span> <span class="fu">ggarrange</span>(figVA, figVB, figVC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">annotate_figure</span>(figV, <span class="at">bottom =</span> <span class="fu">text_grob</span>(<span class="st">&quot;Semilandmarks&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3139,15 +3054,15 @@ colony3   0.632   0.825   1.000</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figV.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figV.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figV.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figV.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="figures" class="level1">
 <h1>Figures</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(figAliA, figAliB, figAliC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">12</span>,</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(figAliA, figAliB, figAliC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">12</span>,</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3155,12 +3070,12 @@ colony3   0.632   0.825   1.000</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figAli.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figAli.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ggarrange(figWithInsetA, figWithInsetB, figWithInsetC,</span></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(figPcaA, figPcaB, figPcaC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">12</span>,</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">common.legend =</span> <span class="cn">TRUE</span>, <span class="at">legend =</span> <span class="st">&quot;top&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figAli.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figAli.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ggarrange(figWithInsetA, figWithInsetB, figWithInsetC,</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(figPcaA, figPcaB, figPcaC, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">font.label =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">12</span>,</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">common.legend =</span> <span class="cn">TRUE</span>, <span class="at">legend =</span> <span class="st">&quot;top&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3168,14 +3083,14 @@ colony3   0.632   0.825   1.000</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figPca.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figPca.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figPca.pdf&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(&#39;figPca.png&#39;, width = 120, height = 200, units = &#39;mm&#39;)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="session-information" class="level1">
 <h1>Session information</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.5.0 (2025-04-11 ucrt)
 Platform: x86_64-w64-mingw32/x64

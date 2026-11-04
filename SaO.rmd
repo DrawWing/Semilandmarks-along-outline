@@ -370,18 +370,6 @@ gdfAll <- geomorph.data.frame(gpaAll, colony = colonyAll, semilandmarks = semila
 lmAll <- procD.lm(coords ~ colony * semilandmarks, data = gdfAll)
 summary(lmAll)
 
-gdfAll$colonyMethod <- interaction(
-  gdfAll$colony,
-  gdfAll$semilandmarks,
-  sep = "."
-)
-
-pdAll <- pairwise(lmAll, groups = gdfAll$colonyMethod)
-summary(pdAll)
-
-pvSao = morphol.disparity(f1 = lmSao, groups = colony, data = gdfSao, print.progress = FALSE)
-pvSao
-
 ```
 
 # Compare variance within and between colonies
